@@ -5,80 +5,10 @@ import 'package:latlong2/latlong.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../features/place/models/place_model.dart';
+import '../../../services/firebase_service.dart';
 
-final placesProvider = Provider<List<PlaceModel>>((ref) {
-  return [
-    PlaceModel(
-      id: '1',
-      name: 'Gyeongbokgung Palace',
-      description: 'The main royal palace of the Joseon dynasty, built in 1395.',
-      category: 'architecture',
-      location: const LatLng(37.5796, 126.9770),
-      imageUrls: [],
-      sdgRelevance: 'Preserves traditional Korean architecture and cultural identity',
-      createdBy: 'system',
-      createdAt: DateTime.now(),
-      isVerified: true,
-      tags: ['palace', 'joseon', 'history'],
-      visitCount: 15420,
-    ),
-    PlaceModel(
-      id: '2',
-      name: 'Bukchon Hanok Village',
-      description: 'Traditional Korean village with 600-year-old hanok houses.',
-      category: 'architecture',
-      location: const LatLng(37.5826, 126.9836),
-      imageUrls: [],
-      sdgRelevance: 'Protects traditional residential architecture',
-      createdBy: 'system',
-      createdAt: DateTime.now(),
-      isVerified: true,
-      tags: ['hanok', 'traditional', 'village'],
-      visitCount: 8930,
-    ),
-    PlaceModel(
-      id: '3',
-      name: 'Jongmyo Shrine',
-      description: 'The oldest Confucian royal shrine, UNESCO World Heritage.',
-      category: 'traditions',
-      location: const LatLng(37.5744, 126.9940),
-      imageUrls: [],
-      sdgRelevance: 'Preserves Confucian rituals and ancestral traditions',
-      createdBy: 'system',
-      createdAt: DateTime.now(),
-      isVerified: true,
-      tags: ['shrine', 'confucian', 'unesco'],
-      visitCount: 5420,
-    ),
-    PlaceModel(
-      id: '4',
-      name: 'Insadong Cultural Street',
-      description: 'Vibrant district with traditional tea houses and crafts.',
-      category: 'art',
-      location: const LatLng(37.5714, 126.9863),
-      imageUrls: [],
-      sdgRelevance: 'Supports traditional crafts and cultural economy',
-      createdBy: 'system',
-      createdAt: DateTime.now(),
-      isVerified: true,
-      tags: ['shopping', 'crafts', 'tea'],
-      visitCount: 12350,
-    ),
-    PlaceModel(
-      id: '5',
-      name: 'Gwangjang Market',
-      description: 'One of Korea oldest traditional markets, since 1905.',
-      category: 'food',
-      location: const LatLng(37.5700, 126.9996),
-      imageUrls: [],
-      sdgRelevance: 'Preserves traditional market culture and culinary heritage',
-      createdBy: 'system',
-      createdAt: DateTime.now(),
-      isVerified: true,
-      tags: ['market', 'streetfood', 'traditional'],
-      visitCount: 9870,
-    ),
-  ];
+final placesProvider = FutureProvider<List<PlaceModel>>((ref) async {
+  return FirebaseService.getPlaces();
 });
 
 class MapScreen extends ConsumerWidget {
@@ -86,7 +16,8 @@ class MapScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final places = ref.watch(placesProvider);
+    final placesAsync = ref.watch(placesProvider);
+    final places = placesAsync.value ?? [];
 
     return Scaffold(
       body: Stack(
@@ -120,6 +51,9 @@ class MapScreen extends ConsumerWidget {
               ),
             ],
           ),
+          // Loading indicator
+          if (placesAsync.isLoading)
+            const Center(child: CircularProgressIndicator()),
           // SDG Badge
           Positioned(
             top: MediaQuery.of(context).padding.top + 16,
@@ -225,8 +159,7 @@ class MapScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             Row(
               children: [
-                const Icon(Icons.visibility,
-                    size: 16, color: Colors.grey),
+                const Icon(Icons.visibility, size: 16, color: Colors.grey),
                 const SizedBox(width: 4),
                 Text(
                   '${place.visitCount} visits',
