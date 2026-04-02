@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "934632517143",
+    "project_id": "culture-map-app",
+    "storage_bucket": "culture-map-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:934632517143:android:0e9e0beb9a80808793f652",
+        "android_client_info": {
+          "package_name": "com.example.culturemap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbEfw1VA2eK_jFFZ9bJwerZc5wTIH8EsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
