@@ -12,7 +12,7 @@ class AppConstants {
       'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
   // Gemini API key (добавим позже)
-  static const String geminiApiKey = 'YOUR_GEMINI_API_KEY';
+  static const String geminiApiKey = 'AIzaSyASBItfFTk8A2h9rWYwg8TuDSzZHiM893U';
 
   // Categories
   static const List<Map<String, String>> categories = [
