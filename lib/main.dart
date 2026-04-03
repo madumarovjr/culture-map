@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'core/theme/app_theme.dart';
 import 'features/map/screens/map_screen.dart';
+import 'features/auth/screens/login_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -26,7 +28,29 @@ class CultureMapApp extends StatelessWidget {
       title: 'CultureMap',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const MainScreen(),
+      home: const AuthWrapper(),
+    );
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        if (snapshot.hasData) {
+          return const MainScreen();
+        }
+        return const LoginScreen();
+      },
     );
   }
 }
