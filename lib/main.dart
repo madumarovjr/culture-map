@@ -6,6 +6,7 @@ import 'core/theme/app_theme.dart';
 import 'features/map/screens/map_screen.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'firebase_options.dart';
+import 'features/ai_guide/screens/ai_chat_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
     const MapScreen(),
     const Center(child: Text('🔍 Explore Screen')),
     const Center(child: Text('➕ Add Place Screen')),
-    const Center(child: Text('🤖 AI Guide Screen')),
+    const AiChatScreen(),
   ];
 
   @override
